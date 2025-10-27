@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traditional Clothes - Local Artisan Marketplace</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/13df28b11c.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Chivo:300,700|Playfair+Display:700i" rel="stylesheet">
+    <style>
+        .region-section {
+            margin: 40px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+        .region-title {
+            font-size: 2em;
+            color: #8B4513;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 20px 0;
+        }
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .artisan-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            padding: 10px;
+            background: #fff8e1;
+            border-radius: 8px;
+        }
+        .artisan-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .painting-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .filter-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .filter-btn {
+            margin: 0 10px;
+            padding: 10px 25px;
+            background: #8B4513;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .filter-btn.active {
+            background: #D2691E;
+        }
+        .hero-section {
+            background: linear-gradient(rgba(139, 69, 19, 0.7), rgba(139, 69, 19, 0.7)), url('showcasepots.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+            margin-bottom: 40px;
+        }
+        .hero-section h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        .hero-section p {
+            font-size: 1.3em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .price {
+            font-size: 1.5em;
+            color: #8B4513;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .add-product-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #8B4513;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            font-weight: bold;
+        }
+        .add-product-btn:hover {
+            background: #D2691E;
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="container">
+            <ul>
+                <h1 class="logo"><a href="home.html">Local Artisan Marketplace</a></h1>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="clothes.html" class="current">Traditional Clothes</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <h1>Traditional Indian Clothing</h1>
+        <p>Discover authentic handcrafted traditional wear from Maharashtra, Gujarat/Kutch, and Rajasthan. Each piece tells a story of heritage, craftsmanship, and sustainable development.</p>
+    </div>
+
+    <div class="container">
+        <div class="filter-section">
+            <button class="filter-btn active" data-region="all">All Regions</button>
+            <button class="filter-btn" data-region="Maharashtra">Maharashtra</button>
+            <button class="filter-btn" data-region="Gujarat/Kutch">Gujarat/Kutch</button>
+            <button class="filter-btn" data-region="Rajasthan">Rajasthan</button>
+        </div>
+
+        <div id="maharashtra-section" class="region-section">
+            <h2 class="region-title">🏵️ Maharashtra Traditional Wear</h2>
+            <div id="maharashtra-products" class="products-grid"></div>
+        </div>
+
+        <div id="gujarat-section" class="region-section">
+            <h2 class="region-title">🌺 Gujarat/Kutch Traditional Wear</h2>
+            <div id="gujarat-products" class="products-grid"></div>
+        </div>
+
+        <div id="rajasthan-section" class="region-section">
+            <h2 class="region-title">🪔 Rajasthan Traditional Wear</h2>
+            <div id="rajasthan-products" class="products-grid"></div>
+        </div>
+    </div>
+
+    <a href="add-clothing.html" class="add-product-btn">+ Add Product</a>
+
+    <footer id="footer" class="text-center">
+        &copy; 2025-All rights reserved. Local Artisan Marketplace - by Divisha and Purva.
+    </footer>
+
+    <script>
+        // Fetch and display products
+        async function loadProducts(region = 'all') {
+            try {
+                const response = await fetch('/api/products?category=Clothing');
+                const products = await response.json();
+                
+                // Clear all sections
+                document.getElementById('maharashtra-products').innerHTML = '';
+                document.getElementById('gujarat-products').innerHTML = '';
+                document.getElementById('rajasthan-products').innerHTML = '';
+
+                // Filter and display products by region
+                const filteredProducts = region === 'all' ? products : products.filter(p => p.region === region);
+                
+                if (filteredProducts.length === 0) {
+                    const message = '<p style="text-align: center; color: #666;">No products available yet. Be the first to add one!</p>';
+                    if (region === 'all' || region === 'Maharashtra') {
+                        document.getElementById('maharashtra-products').innerHTML = message;
+                    }
+                    if (region === 'all' || region === 'Gujarat/Kutch') {
+                        document.getElementById('gujarat-products').innerHTML = message;
+                    }
+                    if (region === 'all' || region === 'Rajasthan') {
+                        document.getElementById('rajasthan-products').innerHTML = message;
+                    }
+                }
+                
+                filteredProducts.forEach(product => {
+                    const productCard = createProductCard(product);
+                    let regionId;
+                    if (product.region === 'Maharashtra') regionId = 'maharashtra';
+                    else if (product.region === 'Gujarat/Kutch') regionId = 'gujarat';
+                    else if (product.region === 'Rajasthan') regionId = 'rajasthan';
+                    
+                    const container = document.getElementById(`${regionId}-products`);
+                    if (container) {
+                        container.innerHTML += productCard;
+                    }
+                });
+
+                // Show/hide sections based on filter
+                document.getElementById('maharashtra-section').style.display = 
+                    (region === 'all' || region === 'Maharashtra') ? 'block' : 'none';
+                document.getElementById('gujarat-section').style.display = 
+                    (region === 'all' || region === 'Gujarat/Kutch') ? 'block' : 'none';
+                document.getElementById('rajasthan-section').style.display = 
+                    (region === 'all' || region === 'Rajasthan') ? 'block' : 'none';
+                    
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+
+        function createProductCard(product) {
+            return `
+                <div class="product-card">
+                    <img src="${product.imageUrl}" alt="${product.name}" class="product-image">
+                    <h3>${product.name}</h3>
+                    <p class="price">₹${product.price}</p>
+                    <p><strong>Region:</strong> ${product.region}</p>
+                    ${product.description ? `<p>${product.description}</p>` : ''}
+                    
+                    ${product.artisanPhoto ? `
+                        <div class="artisan-section">
+                            <img src="${product.artisanPhoto}" alt="${product.artisan}" class="artisan-photo">
+                            <div>
+                                <strong>Artisan:</strong> ${product.artisan}<br>
+                                <small>Handcrafted with care</small>
+                            </div>
+                        </div>
+                    ` : `<p><strong>Artisan:</strong> ${product.artisan}</p>`}
+                    
+                    ${product.paintingUrl ? `
+                        <img src="${product.paintingUrl}" alt="Traditional Design" class="painting-image">
+                        <p><small>Traditional painting/design detail</small></p>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                loadProducts(this.dataset.region);
+            });
+        });
+
+        // Load all products on page load
+        loadProducts();
+    </script>
+</body>
+</html>

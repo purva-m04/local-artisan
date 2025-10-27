@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Traditional Product - Local Artisan Marketplace</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .submit-btn {
+            background: #8B4513;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .submit-btn:hover {
+            background: #D2691E;
+        }
+        .file-input-label {
+            display: block;
+            padding: 12px;
+            background: #f0f0f0;
+            border: 2px dashed #ddd;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+        .file-input-label:hover {
+            background: #e0e0e0;
+        }
+        h1 {
+            color: #8B4513;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="container">
+            <ul>
+                <h1 class="logo"><a href="home.html">Local Artisan Marketplace</a></h1>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="./products.html">Products</a></li>
+                <li><a href="clothes.html">Traditional Clothes</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="add-clothing.html" class="current">Add Product</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-container">
+            <h1>Add Traditional Product</h1>
+            <form id="add-product-form" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="name">Product Name *</label>
+                    <input type="text" id="name" name="name" required placeholder="e.g., Paithani Saree, Bandhani Dupatta, Terracotta Pot">
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price (₹) *</label>
+                    <input type="number" id="price" name="price" required placeholder="e.g., 5000">
+                </div>
+
+                <div class="form-group">
+                    <label for="artisan">Artisan Name *</label>
+                    <input type="text" id="artisan" name="artisan" required placeholder="Name of the craftsperson">
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category *</label>
+                    <select id="category" name="category" required>
+                        <option value="">Select Category</option>
+                        <option value="Clothing">Traditional Clothes</option>
+                        <option value="Handcraft">Handcraft</option>
+                        <option value="Portraits">Portraits</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="region-group">
+                    <label for="region">Region</label>
+                    <select id="region" name="region">
+                        <option value="N/A">Not Applicable</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Gujarat/Kutch">Gujarat/Kutch</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                    </select>
+                    <small>Only for Traditional Clothes</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" placeholder="Describe the product, materials used, traditional techniques, cultural significance..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Product Image *</label>
+                    <label for="product-image" class="file-input-label">
+                        📷 Click to upload product image
+                    </label>
+                    <input type="file" id="product-image" name="product-image" accept="image/*" required style="display: none;">
+                    <small>Main product photo</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Artisan Photo</label>
+                    <label for="artisan-photo" class="file-input-label">
+                        👤 Click to upload artisan photo
+                    </label>
+                    <input type="file" id="artisan-photo" name="artisan-photo" accept="image/*" style="display: none;">
+                    <small>Photo of artisan making/wearing the product</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Traditional Painting/Design Image</label>
+                    <label for="painting-image" class="file-input-label">
+                        🎨 Click to upload painting/design image
+                    </label>
+                    <input type="file" id="painting-image" name="painting-image" accept="image/*" style="display: none;">
+                    <small>Traditional artwork, pattern, or embroidery detail</small>
+                </div>
+
+                <button type="submit" class="submit-btn">Add Product</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // File input preview
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const label = this.previousElementSibling;
+                if (this.files.length > 0) {
+                    label.textContent = '✅ ' + this.files[0].name;
+                    label.style.background = '#d4edda';
+                    label.style.borderColor = '#28a745';
+                }
+            });
+        });
+
+        // Show/hide region based on category
+        document.getElementById('category').addEventListener('change', function() {
+            const regionGroup = document.getElementById('region-group');
+            if (this.value === 'Clothing') {
+                regionGroup.style.display = 'block';
+            } else {
+                regionGroup.style.display = 'none';
+                document.getElementById('region').value = 'N/A';
+            }
+        });
+
+        // Auto-assign SDG goals based on category
+        function autoAssignSDGs(category) {
+            // All traditional products support these SDGs by default
+            const sdgs = [
+                "SDG 1: No Poverty",
+                "SDG 5: Gender Equality", 
+                "SDG 8: Decent Work",
+                "SDG 10: Reduced Inequalities",
+                "SDG 12: Responsible Consumption"
+            ];
+            return sdgs;
+        }
+
+        // Form submission
+        document.getElementById('add-product-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('name', document.getElementById('name').value);
+            formData.append('price', document.getElementById('price').value);
+            formData.append('artisan', document.getElementById('artisan').value);
+            
+            const category = document.getElementById('category').value;
+            formData.append('category', category);
+            
+            const region = document.getElementById('region').value || 'N/A';
+            formData.append('region', region);
+            formData.append('description', document.getElementById('description').value);
+            
+            // Add images
+            const productImage = document.getElementById('product-image').files[0];
+            const artisanPhoto = document.getElementById('artisan-photo').files[0];
+            const paintingImage = document.getElementById('painting-image').files[0];
+            
+            if (productImage) formData.append('product-image', productImage);
+            if (artisanPhoto) formData.append('artisan-photo', artisanPhoto);
+            if (paintingImage) formData.append('painting-image', paintingImage);
+            
+            // Auto-assign SDG goals (hidden from user)
+            const sdgs = autoAssignSDGs(category);
+            formData.append('sdgGoals', JSON.stringify(sdgs));
+            
+            try {
+                const response = await fetch('/api/products', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    alert('Product added successfully! 🎉');
+                    window.location.href = 'products.html';
+                } else {
+                    const errorText = await response.text();
+                    alert('Error adding product: ' + errorText);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error adding product. Please check your connection and try again.');
+            }
+        });
+    </script>
+</body>
+</html>

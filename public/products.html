@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://kit.fontawesome.com/13df28b11c.js" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css?family=Chivo:300,700|Playfair+Display:700i" rel="stylesheet">
+  <title>Products - Local Artisan Marketplace</title>
+  <style>
+    .item-card {
+      text-align: center;
+      border: solid 1px #ddd;
+      margin: 0.5rem;
+      padding: 1rem;
+      flex-basis: 32%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .item-card img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .item-card h2 {
+      font-size: 1.5rem;
+      margin: 10px 0;
+    }
+
+    .item-card .price {
+      font-size: 1.3rem;
+      color: #8B4513;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .item-card p {
+      margin: 5px 0;
+      color: #666;
+    }
+
+    .item-card .btn {
+      margin-top: auto;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <nav id="navbar">
+    <div class="container">
+      <ul>
+        <h1 class="logo"><a href="home.html">Local Artisan Marketplace</a></h1>
+        <li><a href="home.html">Home</a></li>
+        <li><a href="./products.html" class="current">Products</a></li>
+        <li><a href="clothes.html">Traditional Clothes</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="add-clothing.html">Add Product</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <nav id="products-nav">
+    <ul>
+      <li><a href="#" class="category-filter current" data-category="all">All</a></li>
+      <li><a href="#" class="category-filter" data-category="Clothing">Traditional Clothes</a></li>
+      <li><a href="#" class="category-filter" data-category="handcraft">Handcraft</a></li>
+      <li><a href="#" class="category-filter" data-category="portraits">Portraits</a></li>
+    </ul>
+  </nav>
+
+  <section class="container">
+    <h1 class="products-title text-center">Listed Products</h1>
+    <div class="item-container" id="products-container">
+      <p style="text-align: center; width: 100%;">Loading products...</p>
+    </div>
+  </section>
+
+  <footer id="footer" class="text-center">
+    &copy; 2025 - All rights reserved. Local Artisan Marketplace - by Divisha and Purva.
+  </footer>
+
+  <script>
+    let allProducts = [];
+
+    // Fetch all products
+    async function fetchProducts() {
+      try {
+        const response = await fetch('/api/products');
+        allProducts = await response.json();
+        displayProducts(allProducts);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        document.getElementById('products-container').innerHTML =
+          '<p style="text-align: center; color: red; width: 100%;">Error loading products. Please try again.</p>';
+      }
+    }
+
+    // Display products
+    function displayProducts(products) {
+      const container = document.getElementById('products-container');
+
+      if (products.length === 0) {
+        container.innerHTML = '<p style="text-align: center; width: 100%;">No products available. Add some products to get started!</p>';
+        return;
+      }
+
+      container.innerHTML = products.map(product => `
+        <div class="item-card">
+          <img src="${product.imageUrl}" alt="${product.name}">
+          <h2>${product.name}</h2>
+          <p class="price">₹${product.price}</p>
+          <p><strong>By:</strong> ${product.artisan}</p>
+          <p><strong>Region:</strong> ${product.region || 'N/A'}</p>
+          <p><strong>Category:</strong> ${product.category}</p>
+          <p>${product.description || ''}</p>
+          <a href="/product/${product._id}" class="btn">View Details</a>
+        </div>
+      `).join('');
+    }
+
+    // Filter products by category
+    document.querySelectorAll('.category-filter').forEach(filter => {
+      filter.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // Update active class
+        document.querySelectorAll('.category-filter').forEach(f => f.classList.remove('current'));
+        this.classList.add('current');
+
+        const category = this.dataset.category;
+
+        if (category === 'all') {
+          displayProducts(allProducts);
+        } else {
+          const filtered = allProducts.filter(p => p.category === category);
+          displayProducts(filtered);
+        }
+      });
+    });
+
+    // Load products on page load
+    fetchProducts();
+  </script>
+</body>
+</html>
